@@ -177,7 +177,17 @@
   <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.46 1.32 4.96L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.02c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.37c0-4.54 3.7-8.23 8.25-8.23 4.54 0 8.23 3.69 8.23 8.23s-3.69 8.23-8.23 8.23z"/></svg>
 </a>
 
-<script src="resources.js"></script>
+<script>
+  // Library data now lives in data/resources.json (editable via /admin CMS).
+  window.LIBRARY_DATA = null;
+  fetch('data/resources.json').then(r => r.json()).then(json => {
+    window.LIBRARY_DATA = json;
+    bootLibrary();
+  }).catch(() => {
+    document.getElementById('boards-grid').innerHTML =
+      '<p class="text-slate col-span-full">Could not load resources. Make sure data/resources.json is present.</p>';
+  });
+</script>
 <script>
   // ============ STATE ============
   let DATA = { boards:[], levels:[], subjects:[], resources:[] };
@@ -372,13 +382,15 @@
   }
   function resetCrumb(){ sel={board:null,level:null,subject:null,type:'All'}; document.getElementById('search').value=''; updateBreadcrumb(); goStep('boards'); }
 
-  // ============ BOOT (runs last, after all definitions) ============
-  if (window.LIBRARY_DATA) {
-    DATA = window.LIBRARY_DATA;
-    initBoards();
-  } else {
-    document.getElementById('boards-grid').innerHTML =
-      '<p class="text-slate col-span-full">Could not load resources. Make sure resources.js is in the same folder.</p>';
+  // ============ BOOT (called once data/resources.json has loaded) ============
+  function bootLibrary(){
+    if (window.LIBRARY_DATA) {
+      DATA = window.LIBRARY_DATA;
+      initBoards();
+    } else {
+      document.getElementById('boards-grid').innerHTML =
+        '<p class="text-slate col-span-full">Could not load resources. Make sure data/resources.json is present.</p>';
+    }
   }
 
   document.getElementById('year').textContent = new Date().getFullYear();
