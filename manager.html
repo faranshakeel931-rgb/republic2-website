@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Library Manager — The Republic 2.0 (private tool)</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  body{ background:#F7FAF9; }
+  .eyebrow{ letter-spacing:.2em; text-transform:uppercase; font-size:.7rem; font-weight:600; }
+  input,select,textarea{ width:100%; border:1px solid #DDE6E4; border-radius:8px; padding:10px 14px; font-size:14px; }
+  input:focus,select:focus,textarea:focus{ outline:none; border-color:#2BAEAD; box-shadow:0 0 0 2px rgba(43,174,173,.2); }
+  label{ display:block; font-size:13px; font-weight:600; color:#0A1A2F; margin-bottom:5px; }
+</style>
+</head>
+<body class="font-sans text-navy antialiased">
+
+<header class="bg-navy text-white">
+  <div class="max-w-4xl mx-auto px-5 py-5 flex items-center gap-3">
+    <span class="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-emerald"><span class="font-display font-700 text-white">TR</span></span>
+    <div>
+      <h1 class="font-display text-xl font-600">Library Manager</h1>
+      <p class="text-[11px] tracking-wide text-emerald uppercase font-600">Private tool — do not upload to your live site</p>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-5 py-10">
+
+  <!-- Instructions -->
+  <div class="bg-emerald/10 border border-emerald/30 rounded-xl p-5 mb-8 text-sm leading-relaxed">
+    <p class="font-600 text-navy mb-2">How this works — 3 simple steps</p>
+    <ol class="list-decimal pl-5 space-y-1 text-slate">
+      <li><b>Load</b> your current library: open your <code>resources.js</code>, copy everything, paste it in the box at the bottom, and press <b>Load existing</b>. (Skip this the very first time.)</li>
+      <li><b>Add</b> each resource using the form below. It appears in the list instantly.</li>
+      <li><b>Download</b> the new <code>resources.js</code> and drop it into your website folder on Netlify. Done.</li>
+    </ol>
+  </div>
+
+  <!-- Add form -->
+  <section class="bg-white border border-line rounded-xl p-6 mb-8">
+    <p class="eyebrow text-emerald mb-3">Add a resource</p>
+    <div class="grid sm:grid-cols-2 gap-4">
+      <div class="sm:col-span-2">
+        <label>Title</label>
+        <input id="title" placeholder="e.g. Organic Chemistry — Reaction Mechanisms Notes" />
+      </div>
+      <div>
+        <label>Board</label>
+        <select id="board"><option>Cambridge</option><option>Edexcel</option><option>AQA</option><option>OCR</option></select>
+      </div>
+      <div>
+        <label>Level</label>
+        <select id="level"><option>A-Level</option><option>O-Level / IGCSE</option></select>
+      </div>
+      <div>
+        <label>Subject</label>
+        <select id="subject"></select>
+      </div>
+      <div>
+        <label>Topic</label>
+        <input id="topic" placeholder="e.g. Organic Chemistry" />
+      </div>
+      <div>
+        <label>Type</label>
+        <select id="type"><option>Notes</option><option>Past Paper</option><option>Worksheet</option><option>Video</option></select>
+      </div>
+      <div>
+        <label>Year (optional)</label>
+        <input id="year" placeholder="e.g. 2025" />
+      </div>
+      <div class="sm:col-span-2">
+        <label>Link (PDF link, Google Drive link, or YouTube URL)</label>
+        <input id="url" placeholder="https://…" />
+      </div>
+      <div class="sm:col-span-2">
+        <label>Short description (optional)</label>
+        <textarea id="description" rows="2" placeholder="One line describing what this resource covers."></textarea>
+      </div>
+    </div>
+    <button onclick="addResource()" class="mt-5 bg-navy text-white px-6 py-3 rounded-md font-600 text-sm hover:bg-navy transition-colors">+ Add to library</button>
+    <span id="msg" class="ml-3 text-sm font-600 text-emerald"></span>
+  </section>
+
+  <!-- Current list -->
+  <section class="bg-white border border-line rounded-xl p-6 mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <p class="eyebrow text-emerald">Current library <span id="count" class="text-slate/50 ml-1"></span></p>
+      <button onclick="download()" class="bg-emerald text-white px-5 py-2.5 rounded-md font-600 text-sm hover:opacity-90">⬇ Download resources.js</button>
+    </div>
+    <div id="list" class="space-y-2 max-h-[360px] overflow-auto"></div>
+  </section>
+
+  <!-- Load existing -->
+  <section class="bg-white border border-line rounded-xl p-6">
+    <p class="eyebrow text-emerald mb-3">Load existing library (optional)</p>
+    <p class="text-sm text-slate/70 mb-3 font-300">Paste the contents of your current <code>resources.js</code> here and press Load, so you add to it instead of starting over.</p>
+    <textarea id="paste" rows="5" placeholder="Paste your resources.js contents here…"></textarea>
+    <button onclick="loadExisting()" class="mt-3 border border-navy text-navy px-5 py-2.5 rounded-md font-600 text-sm hover:bg-navy hover:text-white transition-colors">Load existing</button>
+    <span id="loadmsg" class="ml-3 text-sm font-600 text-emerald"></span>
+  </section>
+
+</main>
+
+<script>
+  // base structure
+  let DB = {
+    boards:["Cambridge","Edexcel","AQA","OCR"],
+    levels:["A-Level","O-Level / IGCSE"],
+    subjects:["Mathematics","Physics","Chemistry","Biology","Psychology","Geography","English Language","English Literature","Economics","Sociology","Urdu","Punjabi"],
+    resources:[]
+  };
+
+  // populate subject dropdown
+  document.getElementById('subject').innerHTML = DB.subjects.map(s=>`<option>${s}</option>`).join('');
+
+  function nextId(){
+    let max = 0;
+    DB.resources.forEach(r=>{ const n=parseInt((r.id||'').replace(/\D/g,''))||0; if(n>max) max=n; });
+    return 'r'+String(max+1).padStart(3,'0');
+  }
+
+  function addResource(){
+    const t = document.getElementById('title').value.trim();
+    const topic = document.getElementById('topic').value.trim();
+    if(!t || !topic){ flash('msg','Please fill in at least Title and Topic','#C0392B'); return; }
+    DB.resources.push({
+      id: nextId(),
+      title: t,
+      board: document.getElementById('board').value,
+      level: document.getElementById('level').value,
+      subject: document.getElementById('subject').value,
+      topic: topic,
+      type: document.getElementById('type').value,
+      url: document.getElementById('url').value.trim() || '#',
+      year: document.getElementById('year').value.trim(),
+      description: document.getElementById('description').value.trim()
+    });
+    ['title','topic','url','year','description'].forEach(id=>document.getElementById(id).value='');
+    flash('msg','Added ✓','#1FAA59');
+    render();
+  }
+
+  function render(){
+    document.getElementById('count').textContent = `(${DB.resources.length})`;
+    const list = document.getElementById('list');
+    if(DB.resources.length===0){ list.innerHTML = '<p class="text-slate/50 text-sm font-300">No resources yet. Add your first one above.</p>'; return; }
+    list.innerHTML = DB.resources.map((r,i)=>`
+      <div class="flex items-center gap-3 border border-line rounded-lg px-4 py-2.5">
+        <div class="flex-1 min-w-0">
+          <p class="font-600 text-navy text-sm truncate">${r.title}</p>
+          <p class="text-xs text-slate/60">${r.board} · ${r.level} · ${r.subject} · ${r.topic} · <span class="text-emerald font-600">${r.type}</span></p>
+        </div>
+        <button onclick="del(${i})" class="text-xs text-red-600 font-600 shrink-0">Remove</button>
+      </div>`).join('');
+  }
+
+  function del(i){ DB.resources.splice(i,1); render(); }
+
+  function download(){
+    const js = '/* THE REPUBLIC 2.0 LIBRARY DATA */\n' +
+               '/* Edit with manager.html (the Library Manager tool). */\n' +
+               'window.LIBRARY_DATA = ' + JSON.stringify(DB,null,2) + ';\n';
+    const blob = new Blob([js], {type:'application/javascript'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'resources.js';
+    a.click();
+  }
+
+  function loadExisting(){
+    try{
+      let raw = document.getElementById('paste').value.trim();
+      // tolerate pasting the whole resources.js file (strip JS wrapper + comments)
+      raw = raw.replace(/\/\*[\s\S]*?\*\//g, '').trim();
+      raw = raw.replace(/^window\.LIBRARY_DATA\s*=\s*/, '').replace(/;\s*$/, '').trim();
+      const parsed = JSON.parse(raw);
+      if(!parsed.resources) throw new Error('no resources array');
+      DB = Object.assign(DB, parsed);
+      if(!Array.isArray(DB.resources)) DB.resources=[];
+      flash('loadmsg','Loaded '+DB.resources.length+' resources ✓','#1FAA59');
+      render();
+    }catch(e){ flash('loadmsg','That doesn\'t look like valid JSON','#C0392B'); }
+  }
+
+  function flash(id,text,color){ const el=document.getElementById(id); el.textContent=text; el.style.color=color; setTimeout(()=>el.textContent='',2500); }
+
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+/* THE REPUBLIC 2.0 LIBRARY DATA */
+/* Edit with manager.html (the Library Manager tool), or carefully by hand. */
+window.LIBRARY_DATA = {
+  "_comment": "THE REPUBLIC 2.0 LIBRARY DATA. Add resources to the 'resources' array. Easiest way: use manager.html (the Library Manager tool) — it builds these entries for you. Each resource needs: title, board, level, subject, topic, type, url. Optional: year, description. Valid 'type' values: Notes, Past Paper, Worksheet, Video.",
+  "boards": ["Cambridge", "Edexcel", "AQA", "OCR"],
+  "levels": ["A-Level", "O-Level / IGCSE"],
+  "subjects": [
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Psychology",
+    "Geography",
+    "English Language",
+    "English Literature",
+    "Economics",
+    "Sociology",
+    "Urdu",
+    "Punjabi"
+  ],
+  "resources": [
+    {
+      "id": "r001",
+      "title": "Moments & Equilibrium — Complete Notes",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Physics",
+      "topic": "Mechanics",
+      "type": "Notes",
+      "url": "#",
+      "year": "2025",
+      "description": "Full revision notes on moments, the principle of moments, and equilibrium with worked examples."
+    },
+    {
+      "id": "r002",
+      "title": "Mechanics — Moments Practice Booklet (7 Questions)",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Physics",
+      "topic": "Mechanics",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2025",
+      "description": "Seven original exam-style questions with full marking scheme and worked solutions."
+    },
+    {
+      "id": "r003",
+      "title": "Waves & Electricity — Day 2 Companion",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Physics",
+      "topic": "Waves",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2025",
+      "description": "Eleven original questions across wave properties, stationary waves, interference and circuits."
+    },
+    {
+      "id": "r004",
+      "title": "Exam Technique Masterclass — Recording",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Physics",
+      "topic": "Exam Skills",
+      "type": "Video",
+      "url": "#",
+      "year": "2026",
+      "description": "Command words, 'show that' working and 6-mark question structure explained."
+    },
+    {
+      "id": "r005",
+      "title": "Pure Mathematics Year 1 — Crash Course Notes",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Mathematics",
+      "topic": "Pure Mathematics",
+      "type": "Notes",
+      "url": "#",
+      "year": "2026",
+      "description": "Algebra, coordinate geometry, functions, differentiation, integration and trigonometry."
+    },
+    {
+      "id": "r006",
+      "title": "Mechanics & Statistics — Practice Set",
+      "board": "Edexcel",
+      "level": "A-Level",
+      "subject": "Mathematics",
+      "topic": "Mechanics & Statistics",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2026",
+      "description": "Kinematics, forces, probability and hypothesis testing practice questions."
+    },
+    {
+      "id": "r007",
+      "title": "Atomic Structure — Cambridge Notes",
+      "board": "Cambridge",
+      "level": "A-Level",
+      "subject": "Chemistry",
+      "topic": "Atomic Structure",
+      "type": "Notes",
+      "url": "#",
+      "year": "2025",
+      "description": "Cambridge 9701 atomic structure: subatomic particles, isotopes and electron configuration."
+    },
+    {
+      "id": "r008",
+      "title": "Organic Chemistry — Reaction Mechanisms Worksheet",
+      "board": "Cambridge",
+      "level": "A-Level",
+      "subject": "Chemistry",
+      "topic": "Organic Chemistry",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2025",
+      "description": "Practice on nucleophilic substitution, addition and elimination mechanisms."
+    },
+    {
+      "id": "r009",
+      "title": "Cell Biology — IGCSE Revision Notes",
+      "board": "Cambridge",
+      "level": "O-Level / IGCSE",
+      "subject": "Biology",
+      "topic": "Cell Biology",
+      "type": "Notes",
+      "url": "#",
+      "year": "2025",
+      "description": "Cell structure, organelles and specialised cells for Cambridge IGCSE Biology."
+    },
+    {
+      "id": "r010",
+      "title": "Number & Algebra — IGCSE Maths Worksheet",
+      "board": "Cambridge",
+      "level": "O-Level / IGCSE",
+      "subject": "Mathematics",
+      "topic": "Number & Algebra",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2025",
+      "description": "Foundation through higher practice on number operations and algebraic manipulation."
+    },
+    {
+      "id": "r011",
+      "title": "Forces & Motion — GCSE Notes",
+      "board": "AQA",
+      "level": "O-Level / IGCSE",
+      "subject": "Physics",
+      "topic": "Forces & Motion",
+      "type": "Notes",
+      "url": "#",
+      "year": "2025",
+      "description": "AQA GCSE Physics: speed, velocity, acceleration and Newton's laws."
+    },
+    {
+      "id": "r012",
+      "title": "Quadratic Equations — OCR A-Level Worksheet",
+      "board": "OCR",
+      "level": "A-Level",
+      "subject": "Mathematics",
+      "topic": "Pure Mathematics",
+      "type": "Worksheet",
+      "url": "#",
+      "year": "2025",
+      "description": "Solving, completing the square, and the discriminant — exam-style questions."
+    }
+  ]
+};
