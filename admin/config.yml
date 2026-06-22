@@ -1,0 +1,54 @@
+backend:
+  name: git-gateway
+  branch: main
+
+# Files uploaded through any "file"/"image" widget land here, and are served
+# from this public path (e.g. /assets/library-files/my-file.pdf).
+media_folder: "assets/library-files"
+public_folder: "/assets/library-files"
+
+publish_mode: simple
+
+collections:
+  - name: "library"
+    label: "Library Resources"
+    files:
+      - name: "resources"
+        label: "All Library Resources"
+        file: "data/resources.json"
+        fields:
+          - { name: "boards", label: "Exam Boards", widget: "list", default: ["Cambridge", "Edexcel", "AQA", "OCR"] }
+          - { name: "levels", label: "Levels", widget: "list", default: ["A-Level", "O-Level / IGCSE"] }
+          - { name: "subjects", label: "Subjects", widget: "list", default: ["Mathematics", "Physics", "Chemistry", "Biology", "Psychology", "Geography", "English Language", "English Literature", "Economics", "Sociology", "Urdu", "Punjabi"] }
+          - name: "resources"
+            label: "Resources"
+            widget: "list"
+            label_singular: "Resource"
+            summary: "{{title}} — {{subject}} ({{board}})"
+            fields:
+              - { name: "id", label: "ID", widget: "hidden", default: "" }
+              - { name: "title", label: "Title", widget: "string" }
+              - name: "board"
+                label: "Board"
+                widget: "select"
+                options: ["Cambridge", "Edexcel", "AQA", "OCR"]
+              - name: "level"
+                label: "Level"
+                widget: "select"
+                options: ["A-Level", "O-Level / IGCSE"]
+              - name: "subject"
+                label: "Subject"
+                widget: "select"
+                options: ["Mathematics", "Physics", "Chemistry", "Biology", "Psychology", "Geography", "English Language", "English Literature", "Economics", "Sociology", "Urdu", "Punjabi"]
+              - { name: "topic", label: "Topic", widget: "string" }
+              - name: "type"
+                label: "Type"
+                widget: "select"
+                options: ["Notes", "Past Paper", "Worksheet", "Video"]
+              - name: "url"
+                label: "Upload PDF / document (or paste a link)"
+                widget: "file"
+                media_folder: "assets/library-files"
+                public_folder: "/assets/library-files"
+              - { name: "year", label: "Year", widget: "string", required: false }
+              - { name: "description", label: "Description", widget: "text", required: false }
